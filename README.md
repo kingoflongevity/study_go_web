@@ -7,18 +7,23 @@
 <a name="简体中文"></a>
 ## 简体中文
 
-> **免责声明：** 本项目仅用于 **学习与练习**。旨在探索 Go 语言、Echo Web 框架以及整洁架构（Clean Architecture）原则。
+> **免责声明：** 本项目仅用于 **学习与练习**。旨在以 **整洁架构 (Clean Architecture)** 为核心思想，深入探索 Go 语言、Echo Web 框架及后端开发规范。
 
 ### 🚀 项目概览
-基于 Go 和 Echo 框架构建的简单 RESTful API，展示了基础的 CRUD 操作、依赖注入以及使用 GORM 进行数据库交互。
+这是一个基于 Go 和 Echo 框架构建的 RESTful API 示例项目。本项目通过实践 **整洁架构 (Clean Architecture)** 模式，将业务逻辑、数据访问与接口层进行严格分离，是学习大型 Go 项目架构设计的理想参考。
+
+#### 核心设计理念
+- **整洁架构驱动**：严格遵循 `Handler -> Service -> Repository` 分层模式。
+- **关注点分离**：每一层职责明确，降低耦合度。
+- **依赖注入**：通过手动注入依赖，提升代码的可测试性和灵活性。
+- **面向接口编程**：利用 Go 的接口特性，确保层与层之间的解耦。
 
 #### 功能特性
 - 用户管理（增、删、查）
-- 整洁架构分层（Handler -> Service -> Repository）
-- 使用 Viper 进行配置管理
-- 使用 `go-playground/validator` 进行请求校验
-- 基于 GORM (MySQL) 的数据库 ORM
-- 使用 Air 支持热重载
+- 结构化配置管理 (Viper)
+- 请求参数校验 (Validator)
+- 数据库 ORM (GORM + MySQL)
+- 开发环境热重载 (Air)
 
 ### 🛠 技术栈
 - **语言：** Go
@@ -29,17 +34,18 @@
 - **校验库：** [Validator](https://github.com/go-playground/validator)
 
 ### 🏗 项目结构
+本项目遵循 [Standard Go Project Layout](https://github.com/golang-standards/project-layout) 规范：
 ```text
 .
-├── cmd/server/          # 应用程序入口
+├── cmd/server/          # 应用程序入口 (组装各层依赖并启动)
 ├── configs/             # 配置文件 (YAML)
 ├── internal/
 │   ├── config/          # 配置加载逻辑
-│   ├── handler/         # HTTP 处理函数与路由注册
-│   ├── model/           # 数据库模型
-│   ├── repository/      # 数据访问层
-│   └── service/         # 业务逻辑层
-└── pkg/                 # 公共工具库
+│   ├── handler/         # 接口层 (Controller)：处理 HTTP 请求与响应
+│   ├── model/           # 模型层 (Domain Model)：定义数据结构与 GORM 模型
+│   ├── repository/      # 持久层 (Data Access)：封装数据库操作
+│   └── service/         # 业务层 (Business Logic)：核心业务规则处理
+└── pkg/                 # 公共工具库 (非业务相关的通用代码)
 ```
 
 ### 🚦 快速上手
@@ -69,18 +75,23 @@
 <a name="english"></a>
 ## English
 
-> **Disclaimer:** This project is for **learning and practice purposes only**. It is used to explore the Go language, the Echo web framework, and clean architecture principles.
+> **Disclaimer:** This project is for **learning and practice purposes only**. It focuses on mastering **Clean Architecture** principles while exploring the Go language and the Echo web framework.
 
 ### 🚀 Project Overview
-A simple RESTful API built with Go and the Echo framework, demonstrating basic CRUD operations, dependency injection, and database interaction using GORM.
+A RESTful API built with Go and Echo, designed as a practical implementation of **Clean Architecture**. By strictly decoupling business logic, data access, and the interface layer, this project serves as a reference for building maintainable and scalable Go applications.
+
+#### Core Architectural Concepts
+- **Clean Architecture Driven**: Strictly follows the `Handler -> Service -> Repository` layering.
+- **Separation of Concerns**: Each layer has a single responsibility, reducing tight coupling.
+- **Dependency Injection**: Dependencies are manually injected to improve testability and flexibility.
+- **Interface-Oriented**: Leverages Go interfaces to ensure decoupling between layers.
 
 #### Features
 - User Management (Create, Read, Delete)
-- Clean Architecture (Handler -> Service -> Repository)
-- Configuration management using Viper
-- Request validation using `go-playground/validator`
-- Database ORM with GORM (MySQL)
-- Hot-reloading with Air
+- Structured Configuration Management (Viper)
+- Request Validation (Validator)
+- Database ORM (GORM + MySQL)
+- Hot-reloading for development (Air)
 
 ### 🛠 Tech Stack
 - **Language:** Go
@@ -91,17 +102,18 @@ A simple RESTful API built with Go and the Echo framework, demonstrating basic C
 - **Validation:** [Validator](https://github.com/go-playground/validator)
 
 ### 🏗 Project Structure
+This project follows the [Standard Go Project Layout](https://github.com/golang-standards/project-layout):
 ```text
 .
-├── cmd/server/          # Application entry point
+├── cmd/server/          # Entry point (Dependency assembly & Server start)
 ├── configs/             # Configuration files (YAML)
 ├── internal/
 │   ├── config/          # Config loading logic
-│   ├── handler/         # HTTP handlers & routing
-│   ├── model/           # Database models
-│   ├── repository/      # Data access layer
-│   └── service/         # Business logic layer
-└── pkg/                 # Shared utilities
+│   ├── handler/         # Interface Layer (Controller): Handles HTTP req/res
+│   ├── model/           # Model Layer (Domain Model): Data structures & GORM models
+│   ├── repository/      # Persistence Layer (Data Access): Encapsulates DB operations
+│   └── service/         # Service Layer (Business Logic): Core business rules
+└── pkg/                 # Shared Utilities (Generic, non-business code)
 ```
 
 ### 🚦 Getting Started

@@ -3,6 +3,7 @@ module echo-practice
 go 1.25.0
 
 require (
+	github.com/danielgtaylor/huma/v2 v2.38.0
 	github.com/go-playground/validator/v10 v10.30.3
 	github.com/labstack/echo/v4 v4.15.2
 	github.com/labstack/gommon v0.5.0
@@ -25,7 +26,6 @@ require (
 	github.com/mattn/go-colorable v0.1.14 // indirect
 	github.com/mattn/go-isatty v0.0.22 // indirect
 	github.com/pelletier/go-toml/v2 v2.3.0 // indirect
-	github.com/rogpeppe/go-internal v1.14.1 // indirect
 	github.com/sagikazarmark/locafero v0.11.0 // indirect
 	github.com/sourcegraph/conc v0.3.1-0.20240121214520-5f936abd7ae8 // indirect
 	github.com/spf13/afero v1.15.0 // indirect

@@ -44,7 +44,7 @@ type SuccessResponse struct {
 
 // GetUser 获取用户信息
 func (h *UserHandler) GetUser(ctx context.Context, input *UserIDInput) (*UserResponse, error) {
-	user, err := h.svc.GetUserProfile(input.ID)
+	user, err := h.svc.GetUserProfile(ctx, input.ID)
 	if err != nil {
 		return nil, huma.Error404NotFound(fmt.Sprintf("User %s not found", input.ID))
 	}
@@ -58,7 +58,7 @@ func (h *UserHandler) CreateUser(ctx context.Context, input *CreateUserInput) (*
 		Email: input.Body.Email,
 	}
 
-	if err := h.svc.CreateUser(u); err != nil {
+	if err := h.svc.CreateUser(ctx, u); err != nil {
 		return nil, huma.Error500InternalServerError(err.Error())
 	}
 
@@ -67,7 +67,7 @@ func (h *UserHandler) CreateUser(ctx context.Context, input *CreateUserInput) (*
 
 // DeleteUser 删除用户
 func (h *UserHandler) DeleteUser(ctx context.Context, input *UserIDInput) (*SuccessResponse, error) {
-	if err := h.svc.DeleteUser(input.ID); err != nil {
+	if err := h.svc.DeleteUser(ctx, input.ID); err != nil {
 		return nil, huma.Error404NotFound(err.Error())
 	}
 
@@ -85,7 +85,7 @@ func (h *UserHandler) UpdateUser(ctx context.Context, input *struct {
 	}
 }) (*UserResponse, error) {
 	// 1. 先查找是否存在
-	user, err := h.svc.GetUserProfile(input.ID)
+	user, err := h.svc.GetUserProfile(ctx, input.ID)
 	if err != nil {
 		return nil, huma.Error404NotFound("User not found")
 	}
@@ -95,7 +95,7 @@ func (h *UserHandler) UpdateUser(ctx context.Context, input *struct {
 	user.Email = input.Body.Email
 
 	// 3. 执行更新
-	if err := h.svc.UpdateUser(user); err != nil {
+	if err := h.svc.UpdateUser(ctx, user); err != nil {
 		return nil, huma.Error500InternalServerError(err.Error())
 	}
 

@@ -31,7 +31,15 @@ func main() {
 	}
 
 	// 4. 自动迁移
-	err = db.AutoMigrate(&model.User{})
+	err = db.AutoMigrate(
+		&model.User{},
+		&model.Department{},
+		&model.Employee{},
+		&model.Category{},
+		&model.Asset{},
+		&model.MaintenanceRecord{},
+		&model.AssetAllocation{},
+	)
 	if err != nil {
 		panic(fmt.Sprintf("Failed to migrate database: %v", err))
 	}
@@ -56,7 +64,7 @@ func main() {
 
 	// 9. 路由注册 (依赖注入：e, config 指针, db 指针)
 	handler.RegisterRoutes(e, &cfg, db)
-
+	
 	// 10. 启动服务器
 	e.Logger.Fatal(e.Start(cfg.Server.Port))
 }

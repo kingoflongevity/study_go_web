@@ -1,0 +1,7 @@
+server:
+  port: ":8080"
+  env: "development"
+
+database:
+  driver: "mysql"
+  source: "root:$Qq1212112@tcp(192.168.100.14:3306)/echo_db?charset=utf8mb4&parseTime=True&loc=Local"

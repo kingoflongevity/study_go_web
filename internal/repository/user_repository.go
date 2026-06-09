@@ -10,6 +10,7 @@ type UserRepository interface {
 	GetByID(id string) (*model.User, error)
 	Create(user *model.User) error
 	DeleteUser(id string) error
+	Update(user *model.User) error
 }
 
 type gormUserRepository struct {
@@ -37,4 +38,8 @@ func (r *gormUserRepository) DeleteUser(id string) error {
 
 func (r *gormUserRepository) Create(user *model.User) error {
 	return r.db.Create(user).Error
+}
+
+func (r *gormUserRepository) Update(user *model.User) error {
+	return r.db.Save(user).Error
 }

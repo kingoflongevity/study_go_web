@@ -1,11 +1,11 @@
 package main
 
 import (
-	"fmt"
 	"echo-practice/internal/config"
 	"echo-practice/internal/handler"
 	"echo-practice/internal/handler/middlewares"
 	"echo-practice/internal/model"
+	"fmt"
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"

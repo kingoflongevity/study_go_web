@@ -1,11 +1,12 @@
 package handler
 
 import (
+	"context"
 	"echo-practice/internal/model"
 	"echo-practice/internal/service"
-	"net/http"
+	"fmt"
 
-	"github.com/labstack/echo/v4"
+	"github.com/danielgtaylor/huma/v2"
 )
 
 type UserHandler struct {
@@ -18,35 +19,85 @@ func NewUserHandler(s *service.UserService) *UserHandler {
 	}
 }
 
-func (h *UserHandler) CreateUser(c echo.Context) error {
-	u := new(model.User)
-	if err := c.Bind(u); err != nil {
-		return err
+// 定义请求和响应结构体
+
+type CreateUserInput struct {
+	Body struct {
+		Name  string `json:"name" doc:"User name" minLength:"1"`
+		Email string `json:"email" doc:"User email" format:"email"`
 	}
-	if err := c.Validate(u); err != nil {
-		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
+}
+
+type UserIDInput struct {
+	ID string `path:"id" doc:"User ID"`
+}
+
+type UserResponse struct {
+	Body *model.User
+}
+
+type SuccessResponse struct {
+	Body struct {
+		Message string `json:"message"`
+	}
+}
+
+// GetUser 获取用户信息
+func (h *UserHandler) GetUser(ctx context.Context, input *UserIDInput) (*UserResponse, error) {
+	user, err := h.svc.GetUserProfile(input.ID)
+	if err != nil {
+		return nil, huma.Error404NotFound(fmt.Sprintf("User %s not found", input.ID))
+	}
+	return &UserResponse{Body: user}, nil
+}
+
+// CreateUser 创建用户
+func (h *UserHandler) CreateUser(ctx context.Context, input *CreateUserInput) (*UserResponse, error) {
+	u := &model.User{
+		Name:  input.Body.Name,
+		Email: input.Body.Email,
 	}
 
 	if err := h.svc.CreateUser(u); err != nil {
-		return err
+		return nil, huma.Error500InternalServerError(err.Error())
 	}
 
-	return c.JSON(http.StatusCreated, u)
+	return &UserResponse{Body: u}, nil
 }
 
-func (h *UserHandler) GetUser(c echo.Context) error {
-	id := c.Param("id")
-	user, err := h.svc.GetUserProfile(id)
+// DeleteUser 删除用户
+func (h *UserHandler) DeleteUser(ctx context.Context, input *UserIDInput) (*SuccessResponse, error) {
+	if err := h.svc.DeleteUser(input.ID); err != nil {
+		return nil, huma.Error404NotFound(err.Error())
+	}
+
+	resp := &SuccessResponse{}
+	resp.Body.Message = fmt.Sprintf("User %s deleted", input.ID)
+	return resp, nil
+}
+
+// UpdateUser 更新用户
+func (h *UserHandler) UpdateUser(ctx context.Context, input *struct {
+	UserIDInput
+	Body struct {
+		Name  string `json:"name" doc:"New user name"`
+		Email string `json:"email" doc:"New user email" format:"email"`
+	}
+}) (*UserResponse, error) {
+	// 1. 先查找是否存在
+	user, err := h.svc.GetUserProfile(input.ID)
 	if err != nil {
-		return echo.NewHTTPError(http.StatusNotFound, err.Error())
+		return nil, huma.Error404NotFound("User not found")
 	}
-	return c.JSON(http.StatusOK, user)
-}
 
-func (h *UserHandler) DeleteUser(c echo.Context) error {
-	id := c.Param("id")
-	if err := h.svc.DeleteUser(id); err != nil {
-		return echo.NewHTTPError(http.StatusNotFound, err.Error())
+	// 2. 更新数据
+	user.Name = input.Body.Name
+	user.Email = input.Body.Email
+
+	// 3. 执行更新
+	if err := h.svc.UpdateUser(user); err != nil {
+		return nil, huma.Error500InternalServerError(err.Error())
 	}
-	return c.JSON(http.StatusOK, id)
+
+	return &UserResponse{Body: user}, nil
 }

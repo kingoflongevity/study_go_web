@@ -14,24 +14,24 @@
 
 #### 核心设计理念
 - **整洁架构驱动**：严格遵循 `Handler -> Service -> Repository` 分层模式。
+- **类型安全与自动文档**：引入 **Huma v2** 框架，实现代码即文档（OpenAPI 3.1），并提供类型安全的请求/响应校验。
 - **关注点分离**：每一层职责明确，降低耦合度。
 - **依赖注入**：通过手动注入依赖，提升代码的可测试性和灵活性。
-- **面向接口编程**：利用 Go 的接口特性，确保层与层之间的解耦。
 
 #### 功能特性
-- 用户管理（增、删、查）
+- 用户管理（增、删、查、改）
+- **自动生成 API 文档**：访问 `/docs` 即可查看交互式 Swagger UI。
 - 结构化配置管理 (Viper)
-- 请求参数校验 (Validator)
 - 数据库 ORM (GORM + MySQL)
 - 开发环境热重载 (Air)
 
 ### 🛠 技术栈
 - **语言：** Go
-- **Web 框架：** [Echo](https://echo.labstack.com/)
+- **API 框架：** [Huma v2](https://huma.rocks/) (2026 生态首选)
+- **Web 容器：** [Echo](https://echo.labstack.com/)
 - **ORM：** [GORM](https://gorm.io/)
 - **数据库：** MySQL
 - **配置管理：** [Viper](https://github.com/spf13/viper)
-- **校验库：** [Validator](https://github.com/go-playground/validator)
 
 ### 🏗 项目结构
 本项目遵循 [Standard Go Project Layout](https://github.com/golang-standards/project-layout) 规范：
@@ -82,24 +82,25 @@ A RESTful API built with Go and Echo, designed as a practical implementation of 
 
 #### Core Architectural Concepts
 - **Clean Architecture Driven**: Strictly follows the `Handler -> Service -> Repository` layering.
+- **Type-Safe & Auto-Docs**: Powered by **Huma v2** for OpenAPI 3.1 generation and type-safe request/response validation.
 - **Separation of Concerns**: Each layer has a single responsibility, reducing tight coupling.
 - **Dependency Injection**: Dependencies are manually injected to improve testability and flexibility.
-- **Interface-Oriented**: Leverages Go interfaces to ensure decoupling between layers.
 
 #### Features
-- User Management (Create, Read, Delete)
+- User Management (Create, Read, Delete, Update)
+- **Auto-generated API Docs**: Access interactive Swagger UI via `/docs`.
 - Structured Configuration Management (Viper)
-- Request Validation (Validator)
 - Database ORM (GORM + MySQL)
 - Hot-reloading for development (Air)
 
 ### 🛠 Tech Stack
 - **Language:** Go
-- **Web Framework:** [Echo](https://echo.labstack.com/)
+- **API Framework:** [Huma v2](https://huma.rocks/) (2026 Ecosystem Pick)
+- **Web Container:** [Echo](https://echo.labstack.com/)
 - **ORM:** [GORM](https://gorm.io/)
 - **Database:** MySQL
 - **Config Management:** [Viper](https://github.com/spf13/viper)
-- **Validation:** [Validator](https://github.com/go-playground/validator)
+
 
 ### 🏗 Project Structure
 This project follows the [Standard Go Project Layout](https://github.com/golang-standards/project-layout):

@@ -1,0 +1,7 @@
+server:
+  port: ":8080"
+  env: "development"
+
+database:
+  driver: "mysql"
+  source: "root:secret@tcp(127.0.0.1:3306)/echo_db?charset=utf8mb4&parseTime=True&loc=Local"

@@ -1,0 +1,10 @@
+
+   ____    __
+  / __/___/ /  ___
+ / _// __/ _ \/ _ \
+/___/\__/_//_/\___/ v4.15.2
+High performance, minimalist Go web framework
+https://echo.labstack.com
+____________________________________O/_______
+                                    O\
+{"time":"2026-06-05T10:54:16.382249326+08:00","level":"FATAL","prefix":"echo","file":"main.go","line":"30","message":"listen tcp :8080: bind: address already in use"}

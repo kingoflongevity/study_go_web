@@ -22,12 +22,12 @@ type DatabaseConfig struct {
 	Source string `mapstructure:"source"`
 }
 
-// LoadConfig 加载配置，通过 APP_ENV 环境变量切换环境 (dev/test/prod)，默认为 dev
+// LoadConfig 加载配置，通过 APP_ENV 环境变量切换环境 (dev/test/prod)，默认为 test
 func LoadConfig(path string) (config Config, err error) {
-	// 读取 APP_ENV 环境变量，默认 dev
+	// 读取 APP_ENV 环境变量，默认 test
 	env := os.Getenv("APP_ENV")
 	if env == "" {
-		env = "dev"
+		env = "test"
 	}
 
 	// 设置 Viper 搜索路径

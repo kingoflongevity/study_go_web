@@ -26,6 +26,10 @@ func RegisterRoutes(e *echo.Echo, cfg *config.Config, db *gorm.DB) {
 	deptSvc := service.NewDepartmentService(deptRepo)
 	deptHandler := NewDepartmentHandler(deptSvc)
 
+	empRepo := repository.NewEmployeeRepository(db)
+	empSvc := service.NewEmployeeService(empRepo, deptRepo)
+	empHandler := NewEmployeeHandler(empSvc)
+
 	if cfg.Server.Env == "development" {
 		e.Logger.Info("Enabling development mode")
 	}
@@ -66,6 +70,53 @@ func RegisterRoutes(e *echo.Echo, cfg *config.Config, db *gorm.DB) {
 		Description: "根据 ID 删除用户",
 		Tags:        []string{"Users"},
 	}, userHandler.DeleteUser)
+
+	// ========== 员工路由 ==========
+
+	huma.Register(api, huma.Operation{
+		OperationID: "list-employees",
+		Method:      http.MethodGet,
+		Path:        "/api/v1/employees",
+		Summary:     "员工列表",
+		Description: "获取所有员工列表（包含部门信息）",
+		Tags:        []string{"Employees"},
+	}, empHandler.ListEmployees)
+
+	huma.Register(api, huma.Operation{
+		OperationID: "create-employee",
+		Method:      http.MethodPost,
+		Path:        "/api/v1/employees",
+		Summary:     "创建员工",
+		Description: "创建一个新员工并关联部门",
+		Tags:        []string{"Employees"},
+	}, empHandler.CreateEmployee)
+
+	huma.Register(api, huma.Operation{
+		OperationID: "get-employee",
+		Method:      http.MethodGet,
+		Path:        "/api/v1/employees/{id}",
+		Summary:     "获取员工详情",
+		Description: "根据 ID 获取员工信息及所属部门",
+		Tags:        []string{"Employees"},
+	}, empHandler.GetEmployee)
+
+	huma.Register(api, huma.Operation{
+		OperationID: "update-employee",
+		Method:      http.MethodPut,
+		Path:        "/api/v1/employees/{id}",
+		Summary:     "更新员工",
+		Description: "更新指定 ID 的员工信息",
+		Tags:        []string{"Employees"},
+	}, empHandler.UpdateEmployee)
+
+	huma.Register(api, huma.Operation{
+		OperationID: "delete-employee",
+		Method:      http.MethodDelete,
+		Path:        "/api/v1/employees/{id}",
+		Summary:     "删除员工",
+		Description: "根据 ID 删除员工",
+		Tags:        []string{"Employees"},
+	}, empHandler.DeleteEmployee)
 
 	// ========== 部门路由 ==========
 

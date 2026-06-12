@@ -12,6 +12,8 @@ import (
 	"github.com/labstack/gommon/color"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
+	"strings"
+	"time"
 )
 
 func main() {
@@ -27,7 +29,7 @@ func main() {
 	// 3. 初始化数据库
 	db, err := gorm.Open(mysql.Open(cfg.Database.Source), &gorm.Config{})
 	if err != nil {
-		panic(fmt.Sprintf("Failed to connect to database: %v", err))
+		panic(fmt.Sprintf("Failed to connect to database: %v", err.Error()))
 	}
 
 	// 4. 自动迁移
@@ -55,7 +57,7 @@ func main() {
 		Format: "\x1b[36m${time_rfc3339}\x1b[0m | ${color}${status}${reset} | \x1b[33m${latency_human}\x1b[0m | ${methodColor}${method}${reset} | ${uri}\n",
 	}))
 	e.Use(middleware.Recover())
-
+	e.Use(middlewares.RequestStatus())
 	// 8. 自定义全局错误处理
 	e.HTTPErrorHandler = func(err error, c echo.Context) {
 		fmt.Printf("\x1b[31m[ERROR]\x1b[0m %v\n", err)
@@ -64,7 +66,14 @@ func main() {
 
 	// 9. 路由注册 (依赖注入：e, config 指针, db 指针)
 	handler.RegisterRoutes(e, &cfg, db)
-	
-	// 10. 启动服务器
+
+	// 10. 打印 Huma v2 文档地址 (在协程中延迟打印，确保在服务器启动日志之后显示)
+	go func() {
+		time.Sleep(500 * time.Millisecond)
+		port := strings.TrimPrefix(cfg.Server.Port, ":")
+		fmt.Printf("\n\x1b[32m⇨ Huma v2 Documentation:\x1b[0m http://localhost:%s/docs\n\n", port)
+	}()
+
+	// 11. 启动服务器
 	e.Logger.Fatal(e.Start(cfg.Server.Port))
 }

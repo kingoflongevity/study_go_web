@@ -1,6 +1,8 @@
 package middlewares
 
-import "github.com/go-playground/validator/v10"
+import (
+	"github.com/go-playground/validator/v10"
+)
 
 type CustomValidator struct {
 	Validator *validator.Validate
@@ -19,7 +21,6 @@ func NewCustomValidator() *CustomValidator {
 	if err != nil {
 		return nil
 	}
-
 	return &CustomValidator{
 		v,
 	}
